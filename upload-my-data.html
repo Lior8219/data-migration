@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>☁️ העלאת היסטוריה ל-Firebase</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            direction: rtl;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .info-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-right: 4px solid #667eea;
+        }
+        .info-box h3 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        .info-box p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        .data-preview {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .history-item {
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-right: 4px solid #667eea;
+        }
+        .history-item strong {
+            color: #667eea;
+        }
+        .error-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .error-positive { background: #ffe0e0; color: #d32f2f; }
+        .error-negative { background: #e0f2f1; color: #00897b; }
+        .error-zero { background: #e8f5e9; color: #43a047; }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .status {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+        .status.success {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status.error {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .status.info {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>☁️ העלאת היסטוריה ל-Firebase</h1>
+        
+        <div class="info-box">
+            <h3>📋 הנתונים מהאפליקציה הישנה:</h3>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">כיוונונים</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">-2.7</div>
+                    <div class="stat-label">קיזוז גלובלי (דק')</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">11.0</div>
+                    <div class="stat-label">דיוק ממוצע (דק')</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8:00</div>
+                    <div class="stat-label">שעת התחלה</div>
+                </div>
+            </div>
+            <p style="margin-top: 15px;">
+                <strong>קיזוזי קטגוריות:</strong><br>
+                קצר: 0.0 | בינוני: +6.8 | ארוך: -8.6 | ארוך מאוד: 0.0
+            </p>
+        </div>
+
+        <div class="data-preview">
+            <h3 style="color: #667eea; margin-bottom: 15px;">📊 היסטוריה מלאה:</h3>
+            
+            <div class="history-item">
+                <strong>ויגש</strong> (2025-12-27)<br>
+                חיזוי: 09:36 | בפועל: 09:47
+                <span class="error-badge error-positive">+11 דק'</span>
+            </div>
+            
+            <div class="history-item">
+                <strong>וישב</strong> (2025-12-13)<br>
+                חיזוי: 09:35 | בפועל: 09:47
+                <span class="error-badge error-positive">+12 דק'</span>
+            </div>
+            
+            <div class="history-item">
+                <strong>וישלח</strong> (2025-12-06)<br>
+                חיזוי: 10:18 | בפועל: 09:46
+                <span class="error-badge error-negative">-32 דק'</span>
+            </div>
+            
+            <div class="history-item">
+                <strong>ויצא</strong> (2025-11-29)<br>
+                חיזוי: 10:19 | בפועל: 10:08
+                <span class="error-badge error-negative">-11 דק'</span>
+            </div>
+            
+            <div class="history-item">
+                <strong>תולדות</strong> (2025-11-22)<br>
+                חיזוי: 09:38 | בפועל: 09:47
+                <span class="error-badge error-positive">+9 דק'</span>
+            </div>
+            
+            <div class="history-item">
+                <strong>חיי שרה</strong> (2025-11-15)<br>
+                חיזוי: 09:36 | בפועל: 09:38
+                <span class="error-badge error-positive">+2 דק'</span>
+            </div>
+            
+            <div class="history-item">
+                <strong>וירא</strong> (2024-11-09)<br>
+                חיזוי: 10:15 | בפועל: 10:15
+                <span class="error-badge error-zero">0 דק'</span>
+            </div>
+        </div>
+
+        <div id="statusArea"></div>
+
+        <button class="btn btn-primary" id="uploadBtn" onclick="uploadData()">
+            ☁️ העלה את כל הנתונים ל-Firebase
+        </button>
+
+        <div class="info-box">
+            <h3>💡 מה יקרה:</h3>
+            <p>
+                • הנתונים יועלו לבית המשפחתי שלך<br>
+                • כל הקיזוזים יישמרו בדיוק<br>
+                • ההיסטוריה תתווסף לנתונים הקיימים<br>
+                • המערכת תמשיך ללמוד מכל הכיוונונים
+            </p>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAZA1kyjTn4RSUeHwNPzyAknXFUGqaYCB8",
+            authDomain: "shabbat-return.firebaseapp.com",
+            projectId: "shabbat-return",
+            storageBucket: "shabbat-return.firebasestorage.app",
+            messagingSenderId: "173207112920",
+            appId: "1:173207112920:web:604863391f566717ffdbad"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
+
+        let currentUser = null;
+
+        // הנתונים המדויקים מהאפליקציה הישנה
+        const oldAppData = {
+            calibrationCount: 7,
+            globalOffset: -2.7,
+            categoryOffsets: {
+                short: 0.0,
+                medium: 6.8,
+                long: -8.6,
+                very_long: 0.0
+            },
+            startTime: "08:00",
+            history: [
+                {
+                    date: "2025-12-27",
+                    parsha: "ויגש",
+                    predicted: "09:36",
+                    actual: "09:47",
+                    error: 11
+                },
+                {
+                    date: "2025-12-13",
+                    parsha: "וישב",
+                    predicted: "09:35",
+                    actual: "09:47",
+                    error: 12
+                },
+                {
+                    date: "2025-12-06",
+                    parsha: "וישלח",
+                    predicted: "10:18",
+                    actual: "09:46",
+                    error: -32
+                },
+                {
+                    date: "2025-11-29",
+                    parsha: "ויצא",
+                    predicted: "10:19",
+                    actual: "10:08",
+                    error: -11
+                },
+                {
+                    date: "2025-11-22",
+                    parsha: "תולדות",
+                    predicted: "09:38",
+                    actual: "09:47",
+                    error: 9
+                },
+                {
+                    date: "2025-11-15",
+                    parsha: "חיי שרה",
+                    predicted: "09:36",
+                    actual: "09:38",
+                    error: 2
+                },
+                {
+                    date: "2024-11-09",
+                    parsha: "וירא",
+                    predicted: "10:15",
+                    actual: "10:15",
+                    error: 0
+                }
+            ]
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            if (user) {
+                document.getElementById('uploadBtn').disabled = false;
+                showStatus('success', `✅ מחובר כ-${user.displayName}`);
+            } else {
+                showStatus('info', '📱 לחץ על הכפתור להתחברות עם Google');
+            }
+        });
+
+        window.uploadData = async function() {
+            if (!currentUser) {
+                showStatus('info', '⏳ מתחבר עם Google...');
+                try {
+                    await signInWithPopup(auth, provider);
+                } catch (error) {
+                    showStatus('error', '❌ שגיאה בהתחברות: ' + error.message);
+                    return;
+                }
+            }
+
+            try {
+                showStatus('info', '⏳ טוען נתוני משתמש...');
+
+                // מצא את ה-homeId
+                const userRef = doc(db, 'users', currentUser.uid);
+                const userSnap = await getDoc(userRef);
+                
+                if (!userSnap.exists() || !userSnap.data().homeId) {
+                    showStatus('error', '❌ לא נמצא בית משפחתי. צור בית קודם באפליקציה!');
+                    return;
+                }
+
+                const homeId = userSnap.data().homeId;
+                const homeRef = doc(db, 'homes', homeId);
+                const homeSnap = await getDoc(homeRef);
+                const homeData = homeSnap.data();
+
+                showStatus('info', '⏳ מעדכן נתונים עם שם המכייל...');
+
+                // עדכן את שם המכייל בכל הכיוונונים
+                const updatedHistory = oldAppData.history.map(item => ({
+                    ...item,
+                    calibratorId: currentUser.uid,
+                    calibratorName: currentUser.displayName
+                }));
+
+                // חבר עם היסטוריה קיימת
+                const existingHistory = homeData.history || [];
+                const allHistory = [...updatedHistory, ...existingHistory];
+
+                // מיון לפי תאריך (חדש לישן)
+                allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                showStatus('info', '⏳ מעלה ל-Firebase...');
+
+                // עדכן Firebase עם הקיזוזים המדויקים מהאפליקציה הישנה
+                await updateDoc(homeRef, {
+                    history: allHistory,
+                    globalOffset: oldAppData.globalOffset,
+                    categoryOffsets: oldAppData.categoryOffsets,
+                    baseMinutesPerVerse: homeData.baseMinutesPerVerse || 0.918,
+                    startTime: oldAppData.startTime
+                });
+
+                showStatus('success', 
+                    `🎉 הצלחה מלאה!\n\n` +
+                    `✅ 7 כיוונונים הועלו\n` +
+                    `✅ קיזוז גלובלי: ${oldAppData.globalOffset} דק'\n` +
+                    `✅ קיזוזי קטגוריות נשמרו\n` +
+                    `✅ שעת התחלה: ${oldAppData.startTime}\n\n` +
+                    `עכשיו רענן את האפליקציה ותראה את כל הנתונים!`
+                );
+
+                document.getElementById('uploadBtn').disabled = true;
+                document.getElementById('uploadBtn').textContent = '✅ הועלה בהצלחה!';
+
+            } catch (error) {
+                showStatus('error', '❌ שגיאה: ' + error.message);
+                console.error('Full error:', error);
+            }
+        };
+
+        function showStatus(type, message) {
+            const statusArea = document.getElementById('statusArea');
+            statusArea.innerHTML = `<div class="status ${type}">${message.replace(/\n/g, '<br>')}</div>`;
+        }
+
+        // הודעת התחלה
+        setTimeout(() => {
+            if (!currentUser) {
+                showStatus('info', '📱 לחץ על הכפתור להתחלה');
+            }
+        }, 500);
+    </script>
+</body>
+</html>
